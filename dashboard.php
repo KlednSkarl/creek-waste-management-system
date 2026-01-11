@@ -22,7 +22,7 @@ session_start();
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">Creek Monitoring System</a>
+        <a class="navbar-brand fw-bold" href="#">Hydro Guard 180</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
             <span class="navbar-toggler-icon"></span>
@@ -37,7 +37,7 @@ session_start();
                     <a class="nav-link" href="bin.php">Emergency Assistance</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="conveyor_status.php">Rainfal Event History</a>
+                    <a class="nav-link" href="conveyor_status.php">Rainfall Event History</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="notifications.php">Residence Registration</a>
@@ -55,38 +55,24 @@ session_start();
 </nav>
 
 <!-- MAIN CONTENT -->
-<div class="container mt-4">
+<div class="container mt-5">
 
-    <div class="row g-4">
-
-        <div class="col-md-3">
+    <div class="row g-3">
+  
+        <div class="col-md-5">
+            
             <div class="card shadow text-center">
                 <div class="card-body">
+                    <a href="history.php" class="text-decoration-none text-dark">
                     <h5 class="card-title">Creek Water Level</h5>
                     <p class="card-text">Current Level: <strong>Normal</strong></p>
                 </div>
             </div>
+                    </a>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Trash Bin Fill</h5>
-                    <p class="card-text">Fill Status: <strong>65%</strong></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Conveyor Motor</h5>
-                    <p class="card-text">Status: <strong class="text-success">Running</strong></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
+    
+        <div class="col-md-5">
             <div class="card shadow text-center">
                 <div class="card-body">
                     <h5 class="card-title">Alerts</h5>

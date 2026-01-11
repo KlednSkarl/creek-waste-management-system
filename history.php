@@ -29,20 +29,13 @@ $systemUtilization = [60, 75, 80, 70, 85, 90, 65]; // %
 
     <div class="row g-4">
         <!-- Trash Collected -->
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Trash Collected Per Day (kg)</h5>
-                    <canvas id="trashChart"></canvas>
-                </div>
-            </div>
-        </div>
+    
 
         <!-- Water Level -->
-        <div class="col-md-6">
+        <div class="col-md-6-center">
             <div class="card shadow">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Water Level Trends (meters)</h5>
+                    <h5 class="card-title text-center">Water Level Reports (Per Day)</h5>
                     <canvas id="waterChart"></canvas>
                 </div>
             </div>
@@ -52,7 +45,7 @@ $systemUtilization = [60, 75, 80, 70, 85, 90, 65]; // %
         <div class="col-12">
             <div class="card shadow">
                 <div class="card-body">
-                    <h5 class="card-title text-center">System Utilization (%)</h5>
+                    <h5 class="card-title text-center">Water Level Reports (Per Month)</h5>
                     <canvas id="utilizationChart"></canvas>
                 </div>
             </div>
@@ -61,24 +54,7 @@ $systemUtilization = [60, 75, 80, 70, 85, 90, 65]; // %
 </div>
 
 <script>
-    // Trash Collected Chart
-    const trashCtx = document.getElementById('trashChart').getContext('2d');
-    const trashChart = new Chart(trashCtx, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($days) ?>,
-            datasets: [{
-                label: 'Trash Collected (kg)',
-                data: <?= json_encode($trashCollected) ?>,
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+ 
 
     // Water Level Chart
     const waterCtx = document.getElementById('waterChart').getContext('2d');

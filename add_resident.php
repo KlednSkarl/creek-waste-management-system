@@ -4,6 +4,13 @@ require_once __DIR__ . '/config/Database.php';
 $database = new Database();
 $conn = $database->connect();
 
+ 
+// session_start();
+// if (!isset($_SESSION['resident_code'])) {
+//     header("Location: login.php");
+//     exit;
+// }
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = "INSERT INTO residents 
     (resident_code, first_name, last_name, gender, birth_date, age, contact_number, address, barangay, city)
@@ -20,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['contact_number'],
         $_POST['address'],
         $_POST['barangay'],
-        $_POST['city']
+        $_POST['city'],
+         
     ]);
 
     header("Location: notifications.php");
