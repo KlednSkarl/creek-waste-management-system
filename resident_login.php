@@ -1,4 +1,7 @@
 <?php
+ 
+
+ 
 session_start();
 require_once __DIR__ . '/config/Database.php';
 
@@ -7,23 +10,35 @@ $conn = $database->connect();
 $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT * FROM residents WHERE email = ?");
+    $stmt = $conn->prepare("
+        SELECT resident_id, resident_code, first_name, last_name, password_hash
+        FROM residents
+        WHERE email = ?
+        LIMIT 1
+    ");
     $stmt->execute([$email]);
-    $resident = $stmt->fetch();
+    $resident = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($resident && password_verify($password, $resident['password'])) {
+    if ($resident && password_verify($password, $resident['password_hash'])) {
+
+        $_SESSION['resident_id']   = $resident['resident_id'];
         $_SESSION['resident_code'] = $resident['resident_code'];
-        $_SESSION['resident_name'] = $resident['full_name'];
+        $_SESSION['resident_name'] = $resident['first_name'] . ' ' . $resident['last_name'];
+
         header("Location: add_emergency.php");
         exit;
+
     } else {
         $error = "Invalid login credentials.";
     }
 }
-?>
+ ?>
+
+ 
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST">
             <input class="form-control mb-2" type="email" name="email" placeholder="Email" required>
             <input class="form-control mb-3" type="password" name="password" placeholder="Password" required>
-
+            
             <button class="btn btn-danger w-100">Login</button>
             <a href="register_resident.php" class="btn btn-link w-100 mt-2">Create account</a>
         </form>
