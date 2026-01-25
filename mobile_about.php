@@ -19,7 +19,7 @@ session_start();
     <!-- ABOUT SECTION -->
     <div class="card mb-3 shadow-sm">
         <div class="card-header bg-primary text-white">
-            ℹ️ About the System
+            ℹ About the System
         </div>
         <div class="card-body">
             <p class="mb-0">

@@ -30,7 +30,11 @@ session_start();
 
         <div class="collapse navbar-collapse" id="navbarMenu">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
                 <li class="nav-item">
+                    <a class="nav-link" href="user_management.php">User Management</a>
+                </li>
+            <li class="nav-item">
                     <a class="nav-link active" href="creek.php">Water Level</a>
                 </li>
                 <li class="nav-item">

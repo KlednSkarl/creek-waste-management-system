@@ -1,4 +1,11 @@
 <?php
+session_start(); 
+
+if (!isset($_SESSION['resident_code'])) {
+    // Redirect to login or handle error
+    header("Location: login.php");
+    exit();
+}
 require_once __DIR__ . '/config/Database.php';
 
 $database = new Database();
@@ -7,10 +14,10 @@ $conn = $database->connect();
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $resident_code = trim($_POST['resident_code']);
+    $resident_code = $_SESSION['resident_code'];
     $emergency_type = trim($_POST['emergency_type']);
     $description = trim($_POST['description']);
-    $status = trim($_POST['emergency_status']);
+    $status = 'Pending'; // default
 
     if ($resident_code === '' || $emergency_type === '' || $status === '') {
         $message = "Please fill in all required fields.";
@@ -37,16 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-<a href="mobile_about.php" class="btn btn-outline-secondary   w-50  mt-3">
-      About • FAQ • Training
-</a>
+<div class="d-flex justify-content-center mt-3">
+    <a href="mobile_about.php" class="btn btn-outline-secondary w-50">
+        About • FAQ • Training
+    </a>
+</div>
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-6">
 
             <div class="card shadow-sm">
                 <div class="card-header bg-danger text-white text-center">
-                    <h5 class="mb-0">🚨 Report Emergency</h5>
+                    <h5 class="mb-0">  Report Emergency</h5>
                 </div>
 
                 <div class="card-body">
@@ -58,10 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <form method="POST">
                         <!-- Resident Code -->
-                        <div class="mb-3">
-                            <label class="form-label">Resident Code *</label>
-                            <input type="text" name="resident_code" class="form-control" required>
-                        </div>
+                     
 
                         <!-- Emergency Type -->
                         <div class="mb-3">
@@ -83,20 +89,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <!-- Status -->
-                        <div class="mb-3">
-                            <label class="form-label">Status *</label>
-                            <select name="emergency_status" class="form-select" required>
-                                <option value="">Select status</option>
-                                <option>Pending</option>
-                                <option>Responding</option>
-                                <option>Resolved</option>
-                            </select>
-                        </div>
+                   
 
                         <!-- Buttons -->
                         <div class="d-grid gap-2">
                             <button class="btn btn-danger">Submit Emergency</button>
-                            <a href="emergency.php" class="btn btn-secondary">Back</a>
+                            
                         </div>
                     </form>
                 </div>
