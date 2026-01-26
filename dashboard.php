@@ -79,6 +79,9 @@ session_start();
         <div class="col-md-5">
             <div class="card shadow text-center">
                 <div class="card-body">
+
+
+                <a>  </a>
                     <h5 class="card-title">Alerts</h5>
                     <p class="card-text">No active alerts</p>
                 </div>
