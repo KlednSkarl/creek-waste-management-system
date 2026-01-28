@@ -3,7 +3,7 @@ session_start();
 
 if (!isset($_SESSION['resident_code'])) {
     // Redirect to login or handle error
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 require_once __DIR__ . '/config/Database.php';
