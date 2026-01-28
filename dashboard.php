@@ -78,13 +78,15 @@ session_start();
     
         <div class="col-md-5">
             <div class="card shadow text-center">
+                
+                <a href="alerts.php" class="text-decoration-none text-dark"> 
                 <div class="card-body">
 
-
-                <a>  </a>
+ 
                     <h5 class="card-title">Alerts</h5>
-                    <p class="card-text">No active alerts</p>
+                    <p class="card-text">See more About the Levels</p>
                 </div>
+                </a>
             </div>
         </div>
 

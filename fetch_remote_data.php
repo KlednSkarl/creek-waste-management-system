@@ -1,37 +1,34 @@
 <?php
-header("Content-Type: text/plain");
-
+header("Content-Type: application/json");
 require_once __DIR__ . '/config/Database.php';
 
-// 1️⃣ Database connection
 $db = new Database();
 $conn = $db->connect();
 
-// 2️⃣ Render API URL
 $apiUrl = "https://receiver-creek-flood-tracker.onrender.com/receiver.php";
 
-// 3️⃣ Fetch last reading
-$response = file_get_contents($apiUrl); // simple GET now
+$response = file_get_contents($apiUrl);
 
 if ($response === false) {
-    die("Failed to fetch data from Render API");
+    echo json_encode(["status" => "error", "message" => "Failed to fetch API"]);
+    exit;
 }
 
 $data = json_decode($response, true);
 if ($data === null) {
-    die("Invalid JSON from API: " . json_last_error_msg());
+    echo json_encode(["status" => "error", "message" => "Invalid JSON"]);
+    exit;
 }
 
-// 4️⃣ Extract fields
 $deviceId = $data['device_id'] ?? null;
 $temperature = $data['temperature'] ?? null;
 $humidity = $data['humidity'] ?? null;
 
-if ($deviceId === null || $temperature === null) {
-    die("API returned incomplete data");
+if ($deviceId === null || $temperature === null || $humidity === null) {
+    echo json_encode(["status" => "error", "message" => "Incomplete API data"]);
+    exit;
 }
 
-// 5️⃣ Insert into local MySQL
 try {
     $stmt = $conn->prepare("
         INSERT INTO sensor_readings (device_id, temperature, humidity)
@@ -42,7 +39,7 @@ try {
         ":temperature" => $temperature,
         ":humidity" => $humidity
     ]);
-    echo "Data successfully inserted: Device=$deviceId, Temp=$temperature, Humidity=$humidity\n";
+    echo json_encode(["status" => "success"]);
 } catch (PDOException $e) {
-    die("Database insert error: " . $e->getMessage());
+    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
 }
