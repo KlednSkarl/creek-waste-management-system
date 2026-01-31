@@ -54,12 +54,13 @@ if (!isset($_SESSION['username'])) {
     <tbody>
         <?php foreach ($emergencies as $row): ?>
      
- <tr class="table-row"
+<tr class="table-row"
     data-bs-toggle="modal"
     data-bs-target="#detailModal"
+    data-id="<?= $row['emergency_id'] ?>"
     data-code="<?= htmlspecialchars($row['resident_code']) ?>"
     style="cursor:pointer;">
-    
+
             <td><?= htmlspecialchars($row['resident_code']) ?></td>
             <td><?= htmlspecialchars($row['emergency_type']) ?></td>
             <td><?= htmlspecialchars($row['description']) ?></td>
@@ -104,6 +105,7 @@ if (!isset($_SESSION['username'])) {
       </div>
 
       <div class="modal-footer">
+        <button id="markDoneBtn" class="btn btn-secondary" data-bs-dismiss="modal">Mark as Done</button>
         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
 
@@ -115,38 +117,88 @@ if (!isset($_SESSION['username'])) {
 
 
 
+ 
 <script>
-document.querySelectorAll('.table-row').forEach(row => {
-    row.addEventListener('click', () => {
+document.addEventListener("DOMContentLoaded", function() {
 
-        const code = row.dataset.code;
+    let selectedEmergencyId = null;
 
-        fetch(`fetch_resident.php?code=${code}`)
-            .then(res => res.json())
-            .then(data => {
+    // TABLE ROW CLICK
+    document.querySelectorAll('.table-row').forEach(row => {
+        row.addEventListener('click', () => {
 
-                document.getElementById('rCode').textContent = data.resident_code;
-                document.getElementById('rName').textContent =
-                    data.first_name + ' ' + data.last_name;
-                document.getElementById('rGender').textContent = data.gender;
-                document.getElementById('rBirth').textContent = data.birth_date;
-                document.getElementById('rAge').textContent = data.age;
-                document.getElementById('rContact').textContent = data.contact_number;
-                document.getElementById('rEmail').textContent = data.email;
-                document.getElementById('rAddress').textContent =
-                    `${data.address}, ${data.barangay}, ${data.city}`;
-                document.getElementById('rRegistered').textContent = data.registered_at;
+            selectedEmergencyId = row.dataset.id;
+            const code = row.dataset.code;
 
-                document.getElementById('rImage').src =
-                    data.profile_image
-                        ?  encodeURI(data.profile_image)
-                        : 'assets/default.png';
+            console.log("Row clicked. ID:", selectedEmergencyId);
+
+            fetch(`fetch_resident.php?code=${code}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('rCode').textContent = data.resident_code;
+                    document.getElementById('rName').textContent =
+                        data.first_name + ' ' + data.last_name;
+                    document.getElementById('rGender').textContent = data.gender;
+                    document.getElementById('rBirth').textContent = data.birth_date;
+                    document.getElementById('rAge').textContent = data.age;
+                    document.getElementById('rContact').textContent = data.contact_number;
+                    document.getElementById('rEmail').textContent = data.email;
+                    document.getElementById('rAddress').textContent =
+                        `${data.address}, ${data.barangay}, ${data.city}`;
+                    document.getElementById('rRegistered').textContent = data.registered_at;
+
+                    document.getElementById('rImage').src =
+                        data.profile_image
+                            ? encodeURI(data.profile_image)
+                            : 'assets/default.png';
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Unable to load resident data.");
+                });
+        });
+    });
+
+    // MARK AS DONE BUTTON
+    document.getElementById('markDoneBtn').addEventListener('click', () => {
+
+        console.log("Clicked Mark Done");
+        console.log("Selected ID:", selectedEmergencyId);
+
+        if (!selectedEmergencyId) {
+            alert("No emergency selected.");
+            return;
+        }
+
+        fetch('./update_status.php', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({
+                emergency_id: selectedEmergencyId
             })
-            .catch(() => {
-                alert("Unable to load resident data.");
-            });
+        })
+        .then(res => res.text())
+        .then(response => {
+            console.log("Raw response:", response);
+
+            const data = JSON.parse(response);
+
+            if (data.success) {
+                alert("Emergency marked as Done!");
+                location.reload();
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Fetch failed.");
+        });
 
     });
+
 });
 </script>
 
